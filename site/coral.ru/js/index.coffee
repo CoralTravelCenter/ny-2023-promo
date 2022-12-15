@@ -79,12 +79,18 @@ ASAP ->
             constructor: (el, options) ->
                 @options = $.extend({}, @defaults, options)
                 @$el = $(el)
+                @server_moment = moment()
+                @time_gap = moment.duration(0)
                 @init()
 
-            init: () -> @
+            init: () ->
+                $.ajax('/', method: 'HEAD').then (a,b,c) =>
+                    @server_moment = moment(c.getResponseHeader('Date'))
+                    @time_gap = moment.duration(@server_moment.diff(moment()))
+                @
 
             tick: () ->
-                remains = moment.duration(@options.momentX.diff(moment()))
+                remains = moment.duration(@options.momentX.diff(moment())).add(@time_gap)
                 if remains.asSeconds() <= 0
                     @over()
                     return @
@@ -180,3 +186,17 @@ ASAP ->
     $countdown.on 'time-is-up', ->
         $countdown.closest('section').slideUp()
     .Flipdown('start')
+
+    updateInfoBlocks = (content_marker) ->
+        $info_block_to_show = $(".destination-detail[data-content-marker=\"#{ content_marker }\"]")
+        if $info_block_to_show.length
+            $info_block_to_show.addClass('shown').siblings('.shown').removeClass('shown')
+        else
+            $('.destination-detail').removeClass('shown')
+
+    $('#hotels-set .filters-wrap').after($('.destination-details'))
+    $flt_buttons = $('.group-filters [data-group]')
+    content_marker = $flt_buttons.filter('.selected').attr('data-group')
+    updateInfoBlocks content_marker
+
+    $flt_buttons.on 'click', -> updateInfoBlocks $(this).attr('data-group')

@@ -162,16 +162,26 @@ ASAP(function() {
       function Flipdown(el, options) {
         this.options = $.extend({}, this.defaults, options);
         this.$el = $(el);
+        this.server_moment = moment();
+        this.time_gap = moment.duration(0);
         this.init();
       }
 
       Flipdown.prototype.init = function() {
+        $.ajax('/', {
+          method: 'HEAD'
+        }).then((function(_this) {
+          return function(a, b, c) {
+            _this.server_moment = moment(c.getResponseHeader('Date'));
+            return _this.time_gap = moment.duration(_this.server_moment.diff(moment()));
+          };
+        })(this));
         return this;
       };
 
       Flipdown.prototype.tick = function() {
         var remains;
-        remains = moment.duration(this.options.momentX.diff(moment()));
+        remains = moment.duration(this.options.momentX.diff(moment())).add(this.time_gap);
         if (remains.asSeconds() <= 0) {
           this.over();
           return this;
@@ -325,11 +335,28 @@ ASAP(function() {
 });
 
 ASAP(function() {
+  var $flt_buttons, content_marker, updateInfoBlocks;
   $('body .subpage-search-bg > .background').append($('#_intro_markup').html());
   window.$countdown = $('.countdown-widget').Flipdown({
     momentX: moment('2022-12-20T23:59:59')
   });
-  return $countdown.on('time-is-up', function() {
+  $countdown.on('time-is-up', function() {
     return $countdown.closest('section').slideUp();
   }).Flipdown('start');
+  updateInfoBlocks = function(content_marker) {
+    var $info_block_to_show;
+    $info_block_to_show = $(".destination-detail[data-content-marker=\"" + content_marker + "\"]");
+    if ($info_block_to_show.length) {
+      return $info_block_to_show.addClass('shown').siblings('.shown').removeClass('shown');
+    } else {
+      return $('.destination-detail').removeClass('shown');
+    }
+  };
+  $('#hotels-set .filters-wrap').after($('.destination-details'));
+  $flt_buttons = $('.group-filters [data-group]');
+  content_marker = $flt_buttons.filter('.selected').attr('data-group');
+  updateInfoBlocks(content_marker);
+  return $flt_buttons.on('click', function() {
+    return updateInfoBlocks($(this).attr('data-group'));
+  });
 });
