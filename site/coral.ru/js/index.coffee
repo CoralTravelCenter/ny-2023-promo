@@ -182,7 +182,7 @@ ASAP ->
     $('body .subpage-search-bg > .background').append $('#_intro_markup').html()
 
     window.$countdown = $('.countdown-widget').Flipdown
-        momentX: moment('2022-12-20T23:59:59')
+        momentX: moment('2023-01-08T23:59:59')
     $countdown.on 'time-is-up', ->
         $countdown.closest('section').slideUp()
     .Flipdown('start')
@@ -200,3 +200,29 @@ ASAP ->
     updateInfoBlocks content_marker
 
     $flt_buttons.on 'click', -> updateInfoBlocks $(this).attr('data-group')
+
+    preload 'https://cdnjs.cloudflare.com/ajax/libs/proton-engine/5.4.5/proton.min.js', ->
+        $snowfall = $('<div id="snowfall"><canvas></canvas></div>')
+        $('.incredible-decor').append($snowfall)
+        canvas = $snowfall.find('canvas').get(0)
+        proton = new Proton();
+        emitter = new Proton.Emitter()
+        emitter.rate = new Proton.Rate(Proton.getSpan(2, 7), 0.1)
+        emitter.addInitialize(new Proton.Radius(1, 3))
+        emitter.addInitialize(new Proton.Life(3, 10))
+        emitter.addInitialize(new Proton.Velocity(new Proton.Span(.5, 2), new Proton.Span(150, 210), 'polar'))
+        emitter.addInitialize(new Proton.Position(new Proton.LineZone(-700, 0, 700, 0)))
+        emitter.addBehaviour(new Proton.Alpha(1, .3, new Proton.Span(2, 10)))
+        emitter.addBehaviour(new Proton.RandomDrift(2, 0, 5))
+        emitter.emit()
+        proton.addEmitter(emitter)
+        renderer = new Proton.CanvasRenderer(canvas)
+        proton.addRenderer(renderer)
+        syncCanvas = ->
+            canvas.width = $snowfall.width();
+            canvas.height = $snowfall.height();
+            emitter.p.x = canvas.width / 2;
+            return emitter.p.y = 0;
+        $(window).on 'resize orientationchange', syncCanvas
+        syncCanvas()
+        RAFManager.add -> proton.update()
