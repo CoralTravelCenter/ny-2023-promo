@@ -199,7 +199,19 @@ ASAP ->
     content_marker = $flt_buttons.filter('.selected').attr('data-group')
     updateInfoBlocks content_marker
 
-    $flt_buttons.on 'click', -> updateInfoBlocks $(this).attr('data-group')
+    track_group_click = (name) ->
+        map =
+            '*': -> window.ym?(553380, 'reachGoal', 'ng_vse')
+            'Турция': -> window.ym?(553380, 'reachGoal', 'ngtyr')
+            'Таиланд': -> window.ym?(553380, 'reachGoal', 'ngtai')
+            'ОАЭ': -> window.ym?(553380, 'reachGoal', 'ng_oae')
+            'Египет': -> window.ym?(553380, 'reachGoal', 'ng_egypt')
+        map[name]?()
+
+    $flt_buttons.on 'click', ->
+        group_name = $(this).attr('data-group')
+        updateInfoBlocks group_name
+        track_group_click group_name
 
     preload 'https://cdnjs.cloudflare.com/ajax/libs/proton-engine/5.4.5/proton.min.js', ->
         $snowfall = $('<div id="snowfall"><canvas></canvas></div>')

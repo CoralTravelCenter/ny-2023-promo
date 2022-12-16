@@ -335,7 +335,7 @@ ASAP(function() {
 });
 
 ASAP(function() {
-  var $flt_buttons, content_marker, updateInfoBlocks;
+  var $flt_buttons, content_marker, track_group_click, updateInfoBlocks;
   $('body .subpage-search-bg > .background').append($('#_intro_markup').html());
   window.$countdown = $('.countdown-widget').Flipdown({
     momentX: moment('2023-01-08T23:59:59')
@@ -356,8 +356,32 @@ ASAP(function() {
   $flt_buttons = $('.group-filters [data-group]');
   content_marker = $flt_buttons.filter('.selected').attr('data-group');
   updateInfoBlocks(content_marker);
+  track_group_click = function(name) {
+    var map;
+    map = {
+      '*': function() {
+        return typeof window.ym === "function" ? window.ym(553380, 'reachGoal', 'ng_vse') : void 0;
+      },
+      'Турция': function() {
+        return typeof window.ym === "function" ? window.ym(553380, 'reachGoal', 'ngtyr') : void 0;
+      },
+      'Таиланд': function() {
+        return typeof window.ym === "function" ? window.ym(553380, 'reachGoal', 'ngtai') : void 0;
+      },
+      'ОАЭ': function() {
+        return typeof window.ym === "function" ? window.ym(553380, 'reachGoal', 'ng_oae') : void 0;
+      },
+      'Египет': function() {
+        return typeof window.ym === "function" ? window.ym(553380, 'reachGoal', 'ng_egypt') : void 0;
+      }
+    };
+    return typeof map[name] === "function" ? map[name]() : void 0;
+  };
   $flt_buttons.on('click', function() {
-    return updateInfoBlocks($(this).attr('data-group'));
+    var group_name;
+    group_name = $(this).attr('data-group');
+    updateInfoBlocks(group_name);
+    return track_group_click(group_name);
   });
   return preload('https://cdnjs.cloudflare.com/ajax/libs/proton-engine/5.4.5/proton.min.js', function() {
     var $snowfall, canvas, emitter, proton, renderer, syncCanvas;
