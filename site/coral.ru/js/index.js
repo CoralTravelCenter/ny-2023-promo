@@ -377,6 +377,9 @@ ASAP(function() {
     };
     return typeof map[name] === "function" ? map[name]() : void 0;
   };
+  $(document).on('click', '.card-cell .actions > a', function() {
+    return typeof window.ym === "function" ? window.ym(553380, 'reachGoal', 'ng-bron') : void 0;
+  });
   $flt_buttons.on('click', function() {
     var group_name;
     group_name = $(this).attr('data-group');

@@ -208,6 +208,8 @@ ASAP ->
             'Египет': -> window.ym?(553380, 'reachGoal', 'ng_egypt')
         map[name]?()
 
+    $(document).on 'click', '.card-cell .actions > a', -> window.ym?(553380, 'reachGoal', 'ng-bron')
+
     $flt_buttons.on 'click', ->
         group_name = $(this).attr('data-group')
         updateInfoBlocks group_name
