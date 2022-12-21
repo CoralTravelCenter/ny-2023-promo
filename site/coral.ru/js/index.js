@@ -338,7 +338,7 @@ ASAP(function() {
   var $flt_buttons, content_marker, track_group_click, updateInfoBlocks;
   $('body .subpage-search-bg > .background').append($('#_intro_markup').html());
   window.$countdown = $('.countdown-widget').Flipdown({
-    momentX: moment('2023-01-08T23:59:59')
+    momentX: moment('2023-01-08T20:59:59Z')
   });
   $countdown.on('time-is-up', function() {
     return $countdown.closest('section').slideUp();
@@ -373,6 +373,9 @@ ASAP(function() {
       },
       'Египет': function() {
         return typeof window.ym === "function" ? window.ym(553380, 'reachGoal', 'ng_egypt') : void 0;
+      },
+      'Индия': function() {
+        return typeof window.ym === "function" ? window.ym(553380, 'reachGoal', 'ng_india') : void 0;
       }
     };
     return typeof map[name] === "function" ? map[name]() : void 0;

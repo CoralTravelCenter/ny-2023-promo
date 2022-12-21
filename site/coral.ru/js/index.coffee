@@ -182,7 +182,8 @@ ASAP ->
     $('body .subpage-search-bg > .background').append $('#_intro_markup').html()
 
     window.$countdown = $('.countdown-widget').Flipdown
-        momentX: moment('2023-01-08T23:59:59')
+#        momentX: moment('2023-01-08T23:59:59')
+        momentX: moment('2023-01-08T20:59:59Z')
     $countdown.on 'time-is-up', ->
         $countdown.closest('section').slideUp()
     .Flipdown('start')
@@ -206,6 +207,7 @@ ASAP ->
             'Таиланд': -> window.ym?(553380, 'reachGoal', 'ngtai')
             'ОАЭ': -> window.ym?(553380, 'reachGoal', 'ng_oae')
             'Египет': -> window.ym?(553380, 'reachGoal', 'ng_egypt')
+            'Индия': -> window.ym?(553380, 'reachGoal', 'ng_india')
         map[name]?()
 
     $(document).on 'click', '.card-cell .actions > a', -> window.ym?(553380, 'reachGoal', 'ng-bron')
